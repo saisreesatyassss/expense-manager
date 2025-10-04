@@ -25,7 +25,7 @@ const getDashboardData = async () => {
     const allInitiatedTasks: Task[] = initiatedTasksCookie?.value ? JSON.parse(initiatedTasksCookie.value) : [];
     
     // In a real app, you'd filter by initiator ID on the backend.
-    // Here we'll simulate it, assuming initiator info is stored.
+    // We will pass all and let the client filter for simplicity and to avoid server errors.
     const userCookie = cookieStore.get('users_data');
     let allUsers: MockUser[] = BASE_MOCK_USERS;
     if (userCookie?.value) {
@@ -35,8 +35,7 @@ const getDashboardData = async () => {
                 allUsers = parsedUsers;
             }
         } catch (e) {
-            console.error("Failed to parse users_data cookie", e);
-            // Fallback to base users if parsing fails
+            console.error("Failed to parse users_data cookie, falling back.", e);
         }
     }
     const currentUser = allUsers.find(u => u.username === username);

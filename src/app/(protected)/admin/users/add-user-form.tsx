@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,13 +31,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { useToast } from "@/hooks/use-toast";
 import { userFormSchema } from "@/lib/schemas";
 import { addUser } from "./actions";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface AddUserFormProps {
     departments: string[];
     designations: string[];
 }
 
-type FormData = z.infer<typeof userFormSchema>;
+// Omitting password and confirmPassword as we now use a default.
+const formSchema = userFormSchema.omit({ password: true, confirmPassword: true });
+type FormData = z.infer<typeof formSchema>;
 
 export function AddUserForm({ departments, designations }: AddUserFormProps) {
     const { toast } = useToast();
@@ -45,14 +48,12 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<FormData>({
-        resolver: zodResolver(userFormSchema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             firstName: "",
             lastName: "",
             username: "",
             email: "",
-            password: "",
-            confirmPassword: "",
             employeeId: "",
             mobile: "",
             designation: "",
@@ -65,7 +66,8 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
     async function onSubmit(values: FormData) {
         setIsLoading(true);
         try {
-            const result = await addUser(values);
+            // Add the default password to the submission data
+            const result = await addUser({ ...values, password: "password", confirmPassword: "password" });
             if (result.success) {
                 toast({
                     title: "User Created",
@@ -95,6 +97,14 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
                         <CardTitle>User Details</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
+                        <Alert>
+                            <Info className="h-4 w-4" />
+                            <AlertTitle>Default Password</AlertTitle>
+                            <AlertDescription>
+                                All new users are created with the default password: <strong>password</strong>
+                            </AlertDescription>
+                        </Alert>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField control={form.control} name="firstName" render={({ field }) => (
                                 <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -109,14 +119,6 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
                             )} />
                             <FormField control={form.control} name="email" render={({ field }) => (
                                 <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormField control={form.control} name="password" render={({ field }) => (
-                                <FormItem><FormLabel>Password</FormLabel><FormControl><Input type="password" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="confirmPassword" render={({ field }) => (
-                                <FormItem><FormLabel>Confirm Password</FormLabel><FormControl><Input type="password" {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                         </div>
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
