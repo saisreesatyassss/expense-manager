@@ -38,7 +38,6 @@ interface AddUserFormProps {
     designations: string[];
 }
 
-// Omitting password and confirmPassword as we now use a default.
 const formSchema = userFormSchema.omit({ password: true, confirmPassword: true });
 type FormData = z.infer<typeof formSchema>;
 
@@ -66,14 +65,13 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
     async function onSubmit(values: FormData) {
         setIsLoading(true);
         try {
-            // Add the default password to the submission data
             const result = await addUser({ ...values, password: "password", confirmPassword: "password" });
             if (result.success) {
                 toast({
                     title: "User Created",
                     description: `User ${values.username} has been created successfully.`,
                 });
-                router.push('/admin/users/list');
+                router.push('/protected/admin/users/list');
                 router.refresh();
             } else {
                 throw new Error(result.error || 'Failed to create user');
@@ -91,7 +89,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <Card>
                     <CardHeader>
                         <CardTitle>User Details</CardTitle>
