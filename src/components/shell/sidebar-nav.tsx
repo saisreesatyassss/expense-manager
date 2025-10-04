@@ -19,6 +19,7 @@ import {
   User,
   ClipboardPenLine,
   CheckCircle,
+  ScanLine,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -69,7 +70,7 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
   }
 
   const isTasksMenuOpen = isClient && !!user && pathname === '/app/dashboard' && searchParams.has('tab');
-  const isWorkflowMenuOpen = isActive('/app/workflows');
+  const isWorkflowMenuOpen = isActive('/app/workflows') || isActive('/app/scan-receipt');
 
   return (
     <>
@@ -159,6 +160,11 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
               </CollapsibleTrigger>
               <CollapsibleContent asChild>
                   <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild isActive={pathname === '/app/scan-receipt'}>
+                              <Link href="/app/scan-receipt"><ScanLine />Scan Receipt</Link>
+                          </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                           <SidebarMenuSubButton asChild isActive={pathname === '/app/workflows/new'}>
                               <Link href="/app/workflows/new"><FilePlus2 />Submit Expense</Link>

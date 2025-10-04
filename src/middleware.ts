@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedUserRoutes = ['/app', '/app/workflows', '/app/tasks', '/app/profile', '/app/files'];
+const protectedUserRoutes = ['/app/workflows', '/app/tasks', '/app/profile', '/app/files', '/app/scan-receipt'];
 const protectedAdminRoutes = ['/admin'];
 const publicRoutes = ['/login'];
 
@@ -21,10 +21,10 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
   const user = token ? getUserFromToken(token) : null;
 
-  const isProtectedRoute = 
-    protectedUserRoutes.some(p => pathname.startsWith(p)) || 
-    protectedAdminRoutes.some(p => pathname.startsWith(p));
-  
+  // Combine all protected routes
+  const allProtectedRoutes = [...protectedUserRoutes, ...protectedAdminRoutes, '/app'];
+
+  const isProtectedRoute = allProtectedRoutes.some(p => pathname.startsWith(p));
   const isAdminRoute = protectedAdminRoutes.some(p => pathname.startsWith(p));
 
   // If user is not logged in and tries to access any protected route, redirect to login
@@ -71,12 +71,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect old /app/tasks path to the new dashboard tab
-  if (pathname === '/app/tasks') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/app/dashboard';
-    url.searchParams.set('tab', 'my-tasks');
-    return NextResponse.redirect(url);
+  // Redirect old /app/tasks/* paths to the new dashboard tab structure
+  if (pathname.startsWith('/app/tasks')) {
+      const tabMap: { [key: string]: string } = {
+          '/app/tasks/my-tasks': 'my-tasks',
+          '/app/tasks/pooled-tasks': 'pooled-tasks',
+          '/app/tasks/finished-tasks': 'finished-tasks',
+          '/app/tasks/initiated-tasks': 'initiated-tasks'
+      };
+      const targetTab = tabMap[pathname] || 'my-tasks';
+      const url = request.nextUrl.clone();
+      url.pathname = '/app/dashboard';
+      url.searchParams.set('tab', targetTab);
+      return NextResponse.redirect(url);
   }
 
   // Redirect root path to the appropriate dashboard

@@ -4,8 +4,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   CalendarIcon,
   Loader2,
@@ -14,7 +14,7 @@ import {
   PlusCircle,
   Trash2,
 } from "lucide-react";
-import { format, addDays } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
 import Cookies from "js-cookie";
 
 import { Button } from "@/components/ui/button";
@@ -74,6 +74,7 @@ export function NewWorkflowForm({
   initiator,
 }: NewWorkflowFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
@@ -88,6 +89,23 @@ export function NewWorkflowForm({
       attachments: [],
     },
   });
+
+  useEffect(() => {
+    // Pre-fill form from URL parameters (from receipt scan)
+    const title = searchParams.get('title');
+    const amount = searchParams.get('amount');
+    const date = searchParams.get('date');
+
+    if (title) form.setValue('title', title);
+    if (date) form.setValue('startDate', parseISO(date));
+    if (amount && title) {
+        form.setValue('noteSheet', `<p>Expense for ${title} with a total of $${amount}.</p>`);
+    } else if (title) {
+        form.setValue('noteSheet', `<p>Expense for ${title}.</p>`);
+    }
+
+  }, [searchParams, form]);
+
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -304,7 +322,7 @@ export function NewWorkflowForm({
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) => date < new Date("1900-01-01")}
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                           initialFocus
                         />
                       </PopoverContent>
