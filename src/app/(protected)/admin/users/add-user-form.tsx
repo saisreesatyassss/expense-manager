@@ -38,6 +38,7 @@ interface AddUserFormProps {
     designations: string[];
 }
 
+// Omit password fields for the client-side form
 const formSchema = userFormSchema.omit({ password: true, confirmPassword: true });
 type FormData = z.infer<typeof formSchema>;
 
@@ -67,6 +68,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
         try {
             // Add the default password back for the server action
             const result = await addUser({ ...values, password: "password", confirmPassword: "password" });
+            
             if (result.success) {
                 toast({
                     title: "User Created",

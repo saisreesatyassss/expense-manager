@@ -30,13 +30,16 @@ async function getClientSideUsers(): Promise<MockUser[]> {
     const usersCookie = Cookies.get('users_data');
     if (usersCookie) {
         try {
-            return JSON.parse(usersCookie);
+            const parsedUsers = JSON.parse(usersCookie);
+            if (Array.isArray(parsedUsers) && parsedUsers.length > 0) {
+              return parsedUsers;
+            }
         } catch (e) {
-            console.error("Failed to parse users cookie, falling back to base admin", e);
+            console.error("Failed to parse users cookie, falling back to base users", e);
             return BASE_MOCK_USERS; // Fallback on parsing error
         }
     }
-    return BASE_MOCK_USERS; // Fallback to base admin if cookie not set
+    return BASE_MOCK_USERS; // Fallback to base users if cookie not set or is empty
 }
 
 export function LoginForm() {

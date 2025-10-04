@@ -16,19 +16,23 @@ interface GetUsersParams {
     status?: string;
 }
 
+// This is now the single, authoritative function for getting all users from cookies.
 async function getAllUsers(): Promise<MockUser[]> {
     const cookieStore = cookies();
     const usersCookie = cookieStore.get('users_data');
 
     if (usersCookie?.value) {
         try {
-            return JSON.parse(usersCookie.value);
+            const parsedUsers = JSON.parse(usersCookie.value);
+            // Ensure we return an array, even if cookie is malformed
+            return Array.isArray(parsedUsers) ? parsedUsers : BASE_MOCK_USERS;
         } catch (error) {
-            console.error('Failed to parse users cookie, falling back to base admin user:', error);
+            console.error('Failed to parse users cookie, falling back to base users:', error);
+            // If parsing fails, fall back to the default list.
             return BASE_MOCK_USERS;
         }
     }
-    // If cookie doesn't exist, this is the first run.
+    // If cookie doesn't exist at all, this is likely the first run.
     return BASE_MOCK_USERS;
 }
 
@@ -94,18 +98,7 @@ export async function getUsersFromCookie(params: GetUsersParams): Promise<Pagina
 export async function saveUser(userData: z.infer<typeof userFormSchema>): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
         const cookieStore = cookies();
-        let allUsers: MockUser[];
-
-        const usersCookie = cookieStore.get('users_data');
-        if (usersCookie?.value) {
-            try {
-                allUsers = JSON.parse(usersCookie.value);
-            } catch {
-                allUsers = [...BASE_MOCK_USERS]; // Fallback to base admin on parse error
-            }
-        } else {
-            allUsers = [...BASE_MOCK_USERS]; // Initialize with base admin if cookie doesn't exist
-        }
+        let allUsers: MockUser[] = await getAllUsers();
 
         // Check for duplicates
         if (allUsers.some(u => u.username === userData.username)) {
