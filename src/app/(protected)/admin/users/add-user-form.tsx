@@ -71,7 +71,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
                     title: "User Created",
                     description: `User ${values.username} has been created successfully.`,
                 });
-                router.push('/protected/admin/users/list');
+                router.push('/admin/users/list');
                 router.refresh();
             } else {
                 throw new Error(result.error || 'Failed to create user');
@@ -108,7 +108,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
                                 <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="lastName" render={({ field }) => (
-                                <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormMessage></FormItem>
                             )} />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

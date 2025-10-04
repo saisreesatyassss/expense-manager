@@ -23,7 +23,7 @@ export async function addUser(formData: UserFormData): Promise<{ success: boolea
         console.log("A new user has been saved:", result.user);
 
         // Revalidate the path to ensure the user list is updated on the client.
-        revalidatePath('/protected/admin/users/list');
+        revalidatePath('/admin/users/list');
         revalidatePath('/login');
 
         return { success: true };

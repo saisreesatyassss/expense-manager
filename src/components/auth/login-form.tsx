@@ -73,8 +73,9 @@ export function LoginForm() {
         description: "Redirecting to your dashboard...",
       });
       
-      const targetUrl = user.role === 'admin' ? '/protected/admin' : '/protected/app';
-      window.location.href = targetUrl; // Force a full page reload to get new server state
+      const targetUrl = user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard';
+      router.push(targetUrl);
+      router.refresh();
 
     } catch (error) {
       toast({

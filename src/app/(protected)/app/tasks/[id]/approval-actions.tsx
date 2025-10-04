@@ -55,7 +55,7 @@ export function ApprovalActions({ workflow, currentUser }: ApprovalActionsProps)
                     description: `The expense has been processed.`,
                 });
                 router.push('/app/dashboard?tab=my-tasks');
-                router.refresh(); // Important to get new server-side state
+                router.refresh();
             } else {
                 throw new Error(result.error || 'An unknown error occurred');
             }

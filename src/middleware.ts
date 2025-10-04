@@ -2,95 +2,47 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedUserRoutes = ['/app/workflows', '/app/tasks', '/app/profile', '/app/files', '/app/scan-receipt'];
-const protectedAdminRoutes = ['/admin'];
-const publicRoutes = ['/login'];
-
-const getUserFromToken = (token: string) => {
-  try {
-    const [role, username] = token.split(':');
-    if (!role || !username) return null;
-    return { role, username };
-  } catch (error) {
-    return null;
-  }
-};
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth_token')?.value;
-  const user = token ? getUserFromToken(token) : null;
 
-  // Combine all protected routes
-  const allProtectedRoutes = [...protectedUserRoutes, ...protectedAdminRoutes, '/app'];
+  const user = token ? {
+    role: token.split(':')[0],
+    username: token.split(':')[1]
+  } : null;
 
-  const isProtectedRoute = allProtectedRoutes.some(p => pathname.startsWith(p));
-  const isAdminRoute = protectedAdminRoutes.some(p => pathname.startsWith(p));
-
-  // If user is not logged in and tries to access any protected route, redirect to login
-  if (!user && isProtectedRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    url.searchParams.set('redirectedFrom', pathname);
-    return NextResponse.redirect(url);
-  }
-
-  // If a logged-in user tries to access public routes like /login, redirect to their dashboard
-  if (user && publicRoutes.some(p => pathname.startsWith(p))) {
-    const dashboardUrl = user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard';
-    const url = request.nextUrl.clone();
-    url.pathname = dashboardUrl;
-    return NextResponse.redirect(url);
-  }
-
-  // If a regular user tries to access an admin route, redirect to user dashboard
-  if (user && user.role !== 'admin' && isAdminRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/app/dashboard';
-    return NextResponse.redirect(url);
-  }
-  
-  // If an admin user is on a base user route, redirect them to the admin dashboard
-  if (user && user.role === 'admin' && (pathname === '/app' || pathname === '/app/dashboard')) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/dashboard';
-    return NextResponse.redirect(url);
-  }
-
-  // Redirect /app to /app/dashboard
-  if (pathname === '/app') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/app/dashboard';
-    return NextResponse.redirect(url);
-  }
-
-  // Redirect /admin to /admin/dashboard
-  if (pathname === '/admin') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/dashboard';
-    return NextResponse.redirect(url);
-  }
-
-  // Redirect old /app/tasks/* paths to the new dashboard tab structure
-  if (pathname.startsWith('/app/tasks')) {
-      const tabMap: { [key: string]: string } = {
-          '/app/tasks/my-tasks': 'my-tasks',
-          '/app/tasks/pooled-tasks': 'pooled-tasks',
-          '/app/tasks/finished-tasks': 'finished-tasks',
-          '/app/tasks/initiated-tasks': 'initiated-tasks'
-      };
-      const targetTab = tabMap[pathname] || 'my-tasks';
-      const url = request.nextUrl.clone();
-      url.pathname = '/app/dashboard';
-      url.searchParams.set('tab', targetTab);
-      return NextResponse.redirect(url);
-  }
-
-  // Redirect root path to the appropriate dashboard
+  // Redirect root to login or dashboard
   if (pathname === '/') {
     const url = request.nextUrl.clone();
     url.pathname = user ? (user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard') : '/login';
     return NextResponse.redirect(url);
+  }
+
+  // Protect admin routes
+  if (pathname.startsWith('/admin')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+    if (user.role !== 'admin') {
+      return NextResponse.redirect(new URL('/app/dashboard', request.url));
+    }
+  }
+  
+  // Protect app routes
+  if (pathname.startsWith('/app')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+     if (user.role === 'admin') {
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+    }
+  }
+
+  // Redirect logged-in users away from login page
+  if (pathname === '/login' && user) {
+     const url = request.nextUrl.clone();
+     url.pathname = user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard';
+     return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
@@ -98,6 +50,13 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
