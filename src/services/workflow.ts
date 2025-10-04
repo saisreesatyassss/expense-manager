@@ -6,7 +6,7 @@
 // This file contains placeholder functions for interacting with the workflow API.
 
 import type { Workflow, Task, User } from "@/lib/types";
-import { MOCK_USERS } from "@/lib/data";
+import { BASE_MOCK_USERS as MOCK_USERS } from "@/lib/data";
 import { format, subDays, addDays } from 'date-fns';
 
 // This is a temporary in-memory store for demo purposes.
@@ -68,7 +68,7 @@ export async function createWorkflow(payload: any, initiator: User): Promise<{ w
     workflowId: workflowId,
     title: payload.title,
     initiator: { firstName: initiator.firstName, lastName: initiator.lastName},
-    type: 'Green Note',
+    type: 'Expense Report',
     status: 'in-progress',
     progress: 10,
     currentStage: payload.approvers[0]?.name || 'Initial Review',
@@ -143,26 +143,30 @@ export async function getInstance(id: string): Promise<Workflow> {
   console.log(`MOCK API: GET /api/workflows/${id}`);
   
   await new Promise(resolve => setTimeout(resolve, 500));
+  
+  const MOCK_USER_2 = MOCK_USERS[1] || MOCK_USERS[0];
+  const MOCK_USER_3 = MOCK_USERS[2] || MOCK_USERS[0];
+
   return {
     id: id,
     title: 'Q1 Budget Approval',
-    initiator: MOCK_USERS[1],
+    initiator: MOCK_USERS[0],
     department: 'Finance',
     status: 'in-progress',
     currentStep: 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     approvers: [
-        { id: MOCK_USERS[2].username, name: `${MOCK_USERS[2].firstName} ${MOCK_USERS[2].lastName}`, type: 'user' },
-        { id: MOCK_USERS[3].username, name: `${MOCK_USERS[3].firstName} ${MOCK_USERS[3].lastName}`, type: 'user' },
+        { id: MOCK_USER_2.username, name: `${MOCK_USER_2.firstName} ${MOCK_USER_2.lastName}`, type: 'user' },
+        { id: MOCK_USER_3.username, name: `${MOCK_USER_3.firstName} ${MOCK_USER_3.lastName}`, type: 'user' },
     ],
     noteSheet: 'This is the detailed note sheet for the Q1 Budget Approval. We need to finalize the numbers by the end of the week. Please review the attached documents for a breakdown of projected expenses and revenue.',
     attachments: [
-        { id: '1', name: 'budget_proposal.pdf', url: '#', docuvityId: 'doc1', size: 1200000, type: 'application/pdf' },
-        { id: '2', name: 'revenue_forecast.xlsx', url: '#', docuvityId: 'doc2', size: 450000, type: 'application/vnd.ms-excel' },
+        { name: 'budget_proposal.pdf', url: '#', size: 1200000, type: 'application/pdf' },
+        { name: 'revenue_forecast.xlsx', url: '#', size: 450000, type: 'application/vnd.ms-excel' },
     ],
     history: [
-        { id: 'h1', user: { firstName: 'Jane', lastName: 'Doe' }, action: 'Initiated Workflow', timestamp: new Date().toISOString() },
+        { id: 'h1', user: { firstName: 'Jane', lastName: 'Doe', username: 'janedoe' }, action: 'Initiated Expense Report', timestamp: new Date().toISOString() },
     ],
   };
 }
