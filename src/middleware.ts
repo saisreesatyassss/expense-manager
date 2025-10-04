@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedUserRoutes = ['/app', '/workflows'];
+const protectedUserRoutes = ['/app', '/app/workflows', '/app/tasks', '/app/profile', '/app/files'];
 const protectedAdminRoutes = ['/admin'];
 const publicRoutes = ['/login'];
 
@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
 
   // If a logged-in user tries to access public routes like /login, redirect to their dashboard
   if (user && publicRoutes.some(p => pathname.startsWith(p))) {
-    const dashboardUrl = user.role === 'admin' ? '/admin' : '/app';
+    const dashboardUrl = user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard';
     const url = request.nextUrl.clone();
     url.pathname = dashboardUrl;
     return NextResponse.redirect(url);
@@ -57,11 +57,32 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Redirect /app to /app/dashboard
+  if (pathname === '/app') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/app/dashboard';
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect /admin to /admin/dashboard
+  if (pathname === '/admin') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/admin/dashboard';
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect old /app/tasks path to the new dashboard tab
+  if (pathname === '/app/tasks') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/app/dashboard';
+    url.searchParams.set('tab', 'my-tasks');
+    return NextResponse.redirect(url);
+  }
 
   // Redirect root path to the appropriate dashboard
   if (pathname === '/') {
     const url = request.nextUrl.clone();
-    url.pathname = user ? (user.role === 'admin' ? '/admin' : '/app') : '/login';
+    url.pathname = user ? (user.role === 'admin' ? '/admin/dashboard' : '/app/dashboard') : '/login';
     return NextResponse.redirect(url);
   }
 

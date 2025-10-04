@@ -53,7 +53,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { getApproverSuggestions } from "./actions";
 import { FileUploader } from "./file-uploader";
 import { Separator } from "../ui/separator";
 import type { User, Task, Workflow, Approver } from "@/lib/types";
@@ -261,7 +260,7 @@ export function NewWorkflowForm({
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a department" />
-                        </Trigger>
+                        </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {departments.map((dept) => (
