@@ -24,10 +24,8 @@ const getDashboardData = async () => {
     const initiatedTasksCookie = cookieStore.get('initiatedWorkflows');
     const allInitiatedTasks: Task[] = initiatedTasksCookie?.value ? JSON.parse(initiatedTasksCookie.value) : [];
     
-    // In a real app, you'd filter by initiator ID on the backend.
-    // We will pass all and let the client filter for simplicity and to avoid server errors.
-    const userCookie = cookieStore.get('users_data');
     let allUsers: MockUser[] = BASE_MOCK_USERS;
+    const userCookie = cookieStore.get('users_data');
     if (userCookie?.value) {
         try {
             const parsedUsers = JSON.parse(userCookie.value);

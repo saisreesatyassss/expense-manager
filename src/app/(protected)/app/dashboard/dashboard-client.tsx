@@ -8,7 +8,6 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import type { Task, Workflow, User } from '@/lib/types';
 import MyTasksPage from '@/app/(protected)/app/tasks/my-tasks/page';
@@ -17,7 +16,6 @@ import FinishedTasksPage from '@/app/(protected)/app/tasks/finished-tasks/page';
 import PooledTasksPage from '@/app/(protected)/app/tasks/pooled-tasks/page';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
-import Cookies from 'js-cookie';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { FileClock, CheckCircle, Send, Activity, Users, FileCheck2, ListTodo } from 'lucide-react';
 import Link from 'next/link';
@@ -34,28 +32,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
     const tabFromUrl = searchParams.get('tab');
     
     const [activeTab, setActiveTab] = useState(tabFromUrl || "my-tasks");
-    const [myTasks, setMyTasks] = useState<Task[]>(initialMyTasks);
-    const [initiatedTasks, setInitiatedTasks] = useState<Task[]>(initialInitiatedTasks);
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        const authToken = Cookies.get('auth_token');
-        if (!authToken) return;
-
-        try {
-            const [role, username] = authToken.split(':');
-            const user: User = { role, username, firstName: '', lastName: '', id: '', email: '', employeeId: '', mobile: '', designation: '', department: '', status: 'active' };
-            setCurrentUser(user);
-        } catch (e) {
-            console.error("Failed to parse auth token", e);
-        }
-    }, []);
-
-    useEffect(() => {
-        setMyTasks(initialMyTasks);
-        setInitiatedTasks(initialInitiatedTasks);
-    }, [initialMyTasks, initialInitiatedTasks]);
-
+    
     useEffect(() => {
       if (tabFromUrl && tabFromUrl !== activeTab) {
           setActiveTab(tabFromUrl);
@@ -64,11 +41,12 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
 
     const onTabChange = (value: string) => {
       setActiveTab(value);
-      window.history.pushState(null, '', `/app/dashboard?tab=${value}`);
+      const newUrl = `/app/dashboard?tab=${value}`;
+      window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
-    const pendingTasksCount = myTasks.filter(t => t.status === 'pending').length;
-    const inProgressWorkflows = initiatedTasks.filter(t => t.status === 'in-progress').length;
+    const pendingTasksCount = initialMyTasks.filter(t => t.status === 'pending').length;
+    const inProgressWorkflows = initialInitiatedTasks.filter(t => t.status === 'in-progress').length;
     
     const recentFinishedCount = useMemo(() => {
         return Object.values(workflows).filter(w => 
@@ -83,7 +61,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
     ];
 
     const recentActivity = useMemo(() => {
-        const myTaskActivities = myTasks.map(t => ({
+        const myTaskActivities = initialMyTasks.map(t => ({
             id: t.id,
             workflowId: t.workflowId,
             title: t.title,
@@ -92,7 +70,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
             status: t.status,
             icon: FileClock
         }));
-        const initiatedActivities = initiatedTasks.map(t => ({
+        const initiatedActivities = initialInitiatedTasks.map(t => ({
             id: t.id,
             workflowId: t.workflowId,
             title: t.title,
@@ -106,7 +84,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
             .sort((a, b) => b.date.getTime() - a.date.getTime())
             .slice(0, 5);
 
-    }, [myTasks, initiatedTasks, workflows]);
+    }, [initialMyTasks, initialInitiatedTasks, workflows]);
 
     return (
       <div className="space-y-6 animate-fade-in-up">
@@ -144,7 +122,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
                         <TabsTrigger value="initiated-tasks"><Send className="mr-2"/>My Submissions</TabsTrigger>
                     </TabsList>
                     <TabsContent value="my-tasks">
-                        <MyTasksPage tasks={myTasks} />
+                        <MyTasksPage tasks={initialMyTasks} />
                     </TabsContent>
                     <TabsContent value="pooled-tasks">
                         <PooledTasksPage />
@@ -153,7 +131,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
                         <FinishedTasksPage />
                     </TabsContent>
                     <TabsContent value="initiated-tasks">
-                        <InitiatedTasksPage tasks={initiatedTasks} />
+                        <InitiatedTasksPage tasks={initialInitiatedTasks} />
                     </TabsContent>
                 </Tabs>
             </div>
@@ -207,4 +185,3 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
       </div>
     );
 }
-

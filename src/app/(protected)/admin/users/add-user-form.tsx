@@ -65,6 +65,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
     async function onSubmit(values: FormData) {
         setIsLoading(true);
         try {
+            // Add the default password back for the server action
             const result = await addUser({ ...values, password: "password", confirmPassword: "password" });
             if (result.success) {
                 toast({
@@ -108,7 +109,7 @@ export function AddUserForm({ departments, designations }: AddUserFormProps) {
                                 <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="lastName" render={({ field }) => (
-                                <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormMessage></FormItem>
+                                <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
