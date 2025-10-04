@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flowform-frontend
+    ports:
+      - "9002:9002"
+    env_file:
+      - .env.local
+    restart: unless-stopped
+    networks:
+      - flowform-net
+
+networks:
+  flowform-net:
+    driver: bridge
