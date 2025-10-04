@@ -97,7 +97,14 @@ export function NewWorkflowForm({
     const date = searchParams.get('date');
 
     if (title) form.setValue('title', title);
-    if (date) form.setValue('startDate', parseISO(date));
+    if (date) {
+      try {
+        const parsedDate = parseISO(date);
+        form.setValue('startDate', parsedDate);
+      } catch (e) {
+        console.error("Invalid date from URL params", e);
+      }
+    }
     if (amount && title) {
         form.setValue('noteSheet', `<p>Expense for ${title} with a total of $${amount}.</p>`);
     } else if (title) {
@@ -559,3 +566,4 @@ function PreviewDialogContent({ formData, availableApprovers }: { formData: Part
         </DialogContent>
     );
 }
+

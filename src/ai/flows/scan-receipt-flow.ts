@@ -8,6 +8,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const ScanReceiptInputSchema = z.object({
@@ -58,7 +59,13 @@ const scanReceiptFlow = ai.defineFlow(
     outputSchema: ScannedExpenseDataSchema,
   },
   async input => {
-    const {output} = await scanReceiptPrompt(input);
+    const {output} = await ai.generate({
+      model: googleAI('gemini-1.5-flash-latest'),
+      prompt: scanReceiptPrompt.template(input),
+      output: {
+        schema: ScannedExpenseDataSchema,
+      }
+    });
     return output!;
   }
 );
