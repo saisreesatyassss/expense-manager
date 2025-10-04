@@ -2,5 +2,5 @@
 import { redirect } from 'next/navigation';
 
 export default function TasksPage() {
-  redirect('/app/tasks/my-tasks');
+  redirect('/app/dashboard?tab=my-tasks');
 }

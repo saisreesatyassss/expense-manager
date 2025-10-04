@@ -22,7 +22,7 @@ import {
   } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Task } from '@/lib/types';
 import { useDebounce } from '@/hooks/use-debounce';
 
@@ -46,12 +46,15 @@ export default function MyTasksPage({ tasks }: MyTasksPageProps) {
 
   return (
       <Card>
-        <CardContent className="pt-6">
+         <CardHeader>
+            <CardTitle>My Expenses for Approval</CardTitle>
+        </CardHeader>
+        <CardContent>
             <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
                 <div className="relative w-full max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
-                      placeholder="Search your tasks..." 
+                      placeholder="Search expenses..." 
                       className="pl-9"
                       value={searchTerm}
                       onChange={e => setSearchTerm(e.target.value)}
@@ -74,7 +77,7 @@ export default function MyTasksPage({ tasks }: MyTasksPageProps) {
                         <TableRow>
                         <TableHead>Title</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Initiator</TableHead>
+                        <TableHead>Submitted By</TableHead>
                         <TableHead>Due Date</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                         </TableRow>
@@ -100,7 +103,7 @@ export default function MyTasksPage({ tasks }: MyTasksPageProps) {
                     )) : (
                       <TableRow>
                         <TableCell colSpan={5} className="h-24 text-center">
-                          No tasks found.
+                          No expenses awaiting your approval.
                         </TableCell>
                       </TableRow>
                     )}

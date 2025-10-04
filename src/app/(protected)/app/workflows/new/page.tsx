@@ -54,8 +54,8 @@ export default async function NewWorkflowPage() {
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Initiate New Workflow"
-        description="Fill out the details below to start a new approval process."
+        title="Submit New Expense Report"
+        description="Fill out the details below to start a new expense approval process."
       />
       <NewWorkflowForm 
         availableApprovers={availableApprovers}

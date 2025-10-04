@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -108,7 +109,7 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
                     >
                         <div className="flex items-center gap-2">
                           <ListTodo />
-                          <span>Tasks</span>
+                          <span>Approvals</span>
                         </div>
                         <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-90" />
                     </SidebarMenuButton>
@@ -117,22 +118,22 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
                     <SidebarMenuSub>
                         <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild isActive={isTasksActive('my-tasks')}>
-                                <Link href="/app/dashboard?tab=my-tasks"><CheckCircle />My Tasks</Link>
+                                <Link href="/app/dashboard?tab=my-tasks"><CheckCircle />My Approvals</Link>
                             </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                         <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild isActive={isTasksActive('pooled-tasks')}>
-                                <Link href="/app/dashboard?tab=pooled-tasks"><Users />Pooled Tasks</Link>
+                                <Link href="/app/dashboard?tab=pooled-tasks"><Users />Pooled Approvals</Link>
                             </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                         <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild isActive={isTasksActive('finished-tasks')}>
-                                <Link href="/app/dashboard?tab=finished-tasks"><FileCheck2 />Finished Tasks</Link>
+                                <Link href="/app/dashboard?tab=finished-tasks"><FileCheck2 />Finished</Link>
                             </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                         <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild isActive={isTasksActive('initiated-tasks')}>
-                                <Link href="/app/dashboard?tab=initiated-tasks"><Send />Initiated Tasks</Link>
+                                <Link href="/app/dashboard?tab=initiated-tasks"><Send />My Submissions</Link>
                             </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                     </SidebarMenuSub>
@@ -151,7 +152,7 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
                   >
                       <div className="flex items-center gap-2">
                           <FilePlus2 />
-                          <span>Workflows</span>
+                          <span>New Expense</span>
                       </div>
                       <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-90" />
                   </SidebarMenuButton>
@@ -160,7 +161,7 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
                   <SidebarMenuSub>
                       <SidebarMenuSubItem>
                           <SidebarMenuSubButton asChild isActive={pathname === '/app/workflows/new'}>
-                              <Link href="/app/workflows/new"><FilePlus2 />Initiate Workflow</Link>
+                              <Link href="/app/workflows/new"><FilePlus2 />Submit Expense</Link>
                           </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>

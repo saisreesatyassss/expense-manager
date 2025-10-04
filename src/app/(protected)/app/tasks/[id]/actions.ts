@@ -22,7 +22,7 @@ export async function performTaskAction(payload: PerformActionPayload): Promise<
         
         const workflows: Record<string, Workflow> = JSON.parse(workflowsCookie.value);
         const workflow = workflows[workflowId];
-        if (!workflow) throw new Error('Workflow not found.');
+        if (!workflow) throw new Error('Expense report not found.');
         
         // 1. Remove task from current user's "My Tasks"
         const currentUserTasksCookieName = `myTasks_${currentUser.username}`;

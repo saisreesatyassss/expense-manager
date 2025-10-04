@@ -61,7 +61,7 @@ export default async function DashboardPage() {
         <>
             <PageHeader
                 title="My Dashboard"
-                description="Welcome back! Here's a summary of your workflows and tasks."
+                description="Welcome back! Here's a summary of your expense reports and approvals."
             />
             <DashboardClient 
                 initialMyTasks={myTasks}

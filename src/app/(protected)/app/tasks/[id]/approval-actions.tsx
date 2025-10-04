@@ -51,8 +51,8 @@ export function ApprovalActions({ workflow, currentUser }: ApprovalActionsProps)
 
             if (result.success) {
                 toast({
-                    title: `Workflow ${action === 'approve' ? 'Approved' : 'Rejected'}`,
-                    description: `The task has been moved to the next step.`,
+                    title: `Expense Report ${action === 'approve' ? 'Approved' : 'Rejected'}`,
+                    description: `The expense has been processed.`,
                 });
                 router.push('/app/dashboard?tab=my-tasks');
                 router.refresh(); // Important to get new server-side state

@@ -1,3 +1,4 @@
+
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { PageHeader } from '@/components/shell/page-header';
@@ -56,15 +57,15 @@ export default async function TaskDetailsPage({ params }: { params: { id: string
         <>
             <PageHeader
                 title={workflow.title}
-                description={`Workflow ID: ${workflow.id}`}
+                description={`Expense ID: ${workflow.id}`}
             />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Note Sheet</CardTitle>
+                            <CardTitle>Expense Details</CardTitle>
                             <CardDescription>
-                                Initiated by {workflow.initiator.firstName} {workflow.initiator.lastName} on {format(new Date(workflow.createdAt), 'PPP')}
+                                Submitted by {workflow.initiator.firstName} {workflow.initiator.lastName} on {format(new Date(workflow.createdAt), 'PPP')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -78,7 +79,7 @@ export default async function TaskDetailsPage({ params }: { params: { id: string
                      <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Paperclip className="h-5 w-5" /> Attachments
+                                <Paperclip className="h-5 w-5" /> Receipts & Attachments
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -93,7 +94,7 @@ export default async function TaskDetailsPage({ params }: { params: { id: string
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-sm text-muted-foreground">No attachments for this workflow.</p>
+                                <p className="text-sm text-muted-foreground">No attachments for this expense report.</p>
                             )}
                         </CardContent>
                     </Card>

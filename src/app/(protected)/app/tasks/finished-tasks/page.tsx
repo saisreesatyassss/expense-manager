@@ -33,21 +33,21 @@ import { useDebounce } from '@/hooks/use-debounce';
 const FINISHED_TASKS = [
     {
         id: 'wf-001',
-        title: 'Annual Compliance Audit',
-        description: 'Complete annual compliance audit for regulatory requirements',
-        type: 'review',
+        title: 'Q1 Travel Expenses',
+        description: 'Reimbursement for quarterly business travel',
+        type: 'reimbursement',
         finalStatus: 'approved',
         completedBy: 'John Smith',
         completedDate: '2024-01-15',
         duration: '5 days',
-        acknowledgedBy: 'Admin User',
+        acknowledgedBy: 'Finance Dept',
         acknowledgedDate: '2024-01-16'
     },
     {
         id: 'wf-002',
-        title: 'Product Launch Approval',
-        description: 'New investment product launch approval process',
-        type: 'approval',
+        title: 'New Hardware Purchase',
+        description: 'Approval for new development laptops',
+        type: 'purchase-order',
         finalStatus: 'rejected',
         completedBy: 'Sarah Wilson',
         completedDate: '2024-01-12',
@@ -57,26 +57,26 @@ const FINISHED_TASKS = [
     },
     {
         id: 'wf-003',
-        title: 'Risk Model Verification',
-        description: 'Verification of updated risk calculation models',
-        type: 'verification',
+        title: 'Software Subscription Renewal',
+        description: 'Renewal of team-wide software licenses',
+        type: 'subscription',
         finalStatus: 'completed',
         completedBy: 'David Lee',
         completedDate: '2024-01-10',
         duration: '7 days',
-        acknowledgedBy: 'Risk Manager',
+        acknowledgedBy: 'IT Dept',
         acknowledgedDate: '2024-01-11'
     },
     {
         id: 'wf-004',
-        title: 'Client Portfolio Review',
-        description: 'Quarterly client portfolio performance review',
-        type: 'review',
+        title: 'Client Dinner Expense',
+        description: 'Expense report for client entertainment',
+        type: 'reimbursement',
         finalStatus: 'approved',
         completedBy: 'Anna Brown',
         completedDate: '2024-01-08',
         duration: '2 days',
-        acknowledgedBy: 'Portfolio Manager',
+        acknowledgedBy: 'Finance Dept',
         acknowledgedDate: '2024-01-09'
     },
 ];
@@ -101,14 +101,14 @@ export default function FinishedTasksPage() {
   return (
       <Card>
         <CardHeader>
-            <CardTitle>Completed and Acknowledged Tasks</CardTitle>
+            <CardTitle>Completed and Acknowledged Expenses</CardTitle>
         </CardHeader>
         <CardContent>
             <div className="flex flex-col sm:flex-row items-center gap-4 py-4">
                 <div className="relative w-full max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
-                        placeholder="Search finished tasks..." 
+                        placeholder="Search finished expenses..." 
                         className="pl-9"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
@@ -131,9 +131,9 @@ export default function FinishedTasksPage() {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">All Types</SelectItem>
-                        <SelectItem value="review">Review</SelectItem>
-                        <SelectItem value="approval">Approval</SelectItem>
-                        <SelectItem value="verification">Verification</SelectItem>
+                        <SelectItem value="reimbursement">Reimbursement</SelectItem>
+                        <SelectItem value="purchase-order">Purchase Order</SelectItem>
+                        <SelectItem value="subscription">Subscription</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -141,7 +141,7 @@ export default function FinishedTasksPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Task</TableHead>
+                            <TableHead>Expense Report</TableHead>
                             <TableHead>Type</TableHead>
                             <TableHead>Final Status</TableHead>
                             <TableHead>Completed By</TableHead>
@@ -189,7 +189,7 @@ export default function FinishedTasksPage() {
                         )) : (
                             <TableRow>
                                 <TableCell colSpan={6} className="h-24 text-center">
-                                    No tasks found.
+                                    No expenses found.
                                 </TableCell>
                             </TableRow>
                         )}

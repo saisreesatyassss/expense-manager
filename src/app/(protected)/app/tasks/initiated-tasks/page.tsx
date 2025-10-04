@@ -57,11 +57,11 @@ export default function InitiatedTasksPage({ tasks = [] }: InitiatedTasksPagePro
   return (
     <Card>
     <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Your Initiated Tasks ({tasks.length})</CardTitle>
+        <CardTitle>Your Submitted Expenses ({tasks.length})</CardTitle>
         <Button asChild>
             <Link href="/app/workflows/new">
                 <PlusCircle className="mr-2"/>
-                New Task
+                New Expense
             </Link>
         </Button>
     </CardHeader>
@@ -70,7 +70,7 @@ export default function InitiatedTasksPage({ tasks = [] }: InitiatedTasksPagePro
             <div className="relative w-full max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input 
-                    placeholder="Search initiated tasks..." 
+                    placeholder="Search submitted expenses..." 
                     className="pl-9"
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
@@ -94,7 +94,7 @@ export default function InitiatedTasksPage({ tasks = [] }: InitiatedTasksPagePro
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="Green Note">Green Note</SelectItem>
+                    <SelectItem value="Expense Report">Expense Report</SelectItem>
                     <SelectItem value="NISM Approval">NISM Approval</SelectItem>
                 </SelectContent>
             </Select>
@@ -103,7 +103,7 @@ export default function InitiatedTasksPage({ tasks = [] }: InitiatedTasksPagePro
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Task</TableHead>
+                        <TableHead>Expense Report</TableHead>
                         <TableHead>Type</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Progress</TableHead>
@@ -152,7 +152,7 @@ export default function InitiatedTasksPage({ tasks = [] }: InitiatedTasksPagePro
                     )) : (
                         <TableRow>
                             <TableCell colSpan={7} className="h-24 text-center">
-                                No tasks found.
+                                No submitted expenses found.
                             </TableCell>
                         </TableRow>
                     )}

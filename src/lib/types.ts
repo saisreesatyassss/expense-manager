@@ -53,7 +53,7 @@ export type Task = {
   dueDate: string;
   status: 'pending' | 'approved' | 'rejected' | 'in-progress' | 'completed' | 'draft';
   taskType: 'My' | 'Pooled' | 'Finished' | 'Initiated';
-  type?: 'Green Note' | 'NISM Approval';
+  type?: 'Expense Report' | 'NISM Approval';
   progress?: number;
   currentStage?: string;
   priority?: 'High' | 'Medium' | 'Low';

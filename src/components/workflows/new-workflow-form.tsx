@@ -131,7 +131,7 @@ export function NewWorkflowForm({
         history: [{
           id: `hist-${Date.now()}`,
           user: { firstName: workflowInitiator.firstName, lastName: workflowInitiator.lastName, username: workflowInitiator.username },
-          action: 'Initiated Workflow',
+          action: 'Initiated Expense Report',
           timestamp: new Date().toISOString()
         }]
       };
@@ -149,7 +149,7 @@ export function NewWorkflowForm({
           workflowId: workflowId,
           title: values.title,
           initiator: { firstName: initiator.firstName, lastName: initiator.lastName },
-          type: 'Green Note',
+          type: 'Expense Report',
           status: 'in-progress',
           progress: 10,
           currentStage: newWorkflow.approvers[0]?.name || 'Initial Review',
@@ -186,8 +186,8 @@ export function NewWorkflowForm({
       }
 
       toast({
-          title: "Workflow Started!",
-          description: initiator ? `Your workflow (ID: ${workflowId}) has been successfully initiated.` : 'Your workflow has been submitted. Please login to track its status.',
+          title: "Expense Report Submitted!",
+          description: initiator ? `Your expense report (ID: ${workflowId}) has been successfully submitted.` : 'Your expense has been submitted. Please login to track its status.',
       });
       
       router.push(initiator ? "/app/dashboard?tab=initiated-tasks" : "/login");
@@ -234,7 +234,7 @@ export function NewWorkflowForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Workflow Details</CardTitle>
+            <CardTitle>Expense Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -242,9 +242,9 @@ export function NewWorkflowForm({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Title / Purpose</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Q3 Marketing Budget" {...field} />
+                    <Input placeholder="e.g., Q3 Client Meeting Travel" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -261,7 +261,7 @@ export function NewWorkflowForm({
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a department" />
-                        </SelectTrigger>
+                        </Trigger>
                       </FormControl>
                       <SelectContent>
                         {departments.map((dept) => (
@@ -280,7 +280,7 @@ export function NewWorkflowForm({
                 name="startDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col pt-2">
-                    <FormLabel>Start Date</FormLabel>
+                    <FormLabel>Expense Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -320,7 +320,7 @@ export function NewWorkflowForm({
         
         <Card>
             <CardHeader>
-                <CardTitle>Note Sheet</CardTitle>
+                <CardTitle>Expense Description & Justification</CardTitle>
             </CardHeader>
             <CardContent>
                 <FormField
@@ -346,7 +346,7 @@ export function NewWorkflowForm({
 
         <Card>
             <CardHeader>
-                <CardTitle>Attachments</CardTitle>
+                <CardTitle>Receipts & Attachments</CardTitle>
             </CardHeader>
             <CardContent>
                  <FormField
@@ -464,7 +464,7 @@ export function NewWorkflowForm({
 
             <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Start the Flow
+                Submit for Approval
             </Button>
         </div>
       </form>
@@ -485,22 +485,22 @@ function PreviewDialogContent({ formData, availableApprovers }: { formData: Part
     return (
         <DialogContent className="max-w-2xl">
             <DialogHeader>
-                <DialogTitle>Workflow Preview</DialogTitle>
+                <DialogTitle>Expense Report Preview</DialogTitle>
             </DialogHeader>
             <div className="space-y-6 py-4 max-h-[70vh] overflow-y-auto">
                 <div className="space-y-2">
-                    <h3 className="font-semibold text-lg">Workflow Details</h3>
+                    <h3 className="font-semibold text-lg">Expense Details</h3>
                     <div className="grid grid-cols-2 gap-2 text-sm">
                         <p><span className="font-medium text-muted-foreground">Title:</span> {formData.title || 'Not set'}</p>
                         <p><span className="font-medium text-muted-foreground">Department:</span> {formData.department || 'Not set'}</p>
-                        <p><span className="font-medium text-muted-foreground">Start Date:</span> {formData.startDate ? format(formData.startDate, "PPP") : 'Not set'}</p>
+                        <p><span className="font-medium text-muted-foreground">Expense Date:</span> {formData.startDate ? format(formData.startDate, "PPP") : 'Not set'}</p>
                     </div>
                 </div>
 
                 <Separator />
                 
                 <div className="space-y-2">
-                    <h3 className="font-semibold text-lg">Note Sheet</h3>
+                    <h3 className="font-semibold text-lg">Description & Justification</h3>
                     <div 
                         className="prose prose-sm max-w-none dark:prose-invert rounded-md border p-4"
                         dangerouslySetInnerHTML={{ __html: formData.noteSheet || '<p class="text-muted-foreground">No content.</p>' }} 
@@ -542,6 +542,3 @@ function PreviewDialogContent({ formData, availableApprovers }: { formData: Part
         </DialogContent>
     );
 }
-
-    
-

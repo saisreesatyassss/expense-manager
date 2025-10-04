@@ -77,9 +77,9 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
     }, [workflows]);
     
     const summaryData = [
-        { title: 'Pending Tasks', count: pendingTasksCount, icon: FileClock, change: 'Awaiting your action', color: 'text-yellow-500', bgColor: 'bg-yellow-500/10' },
-        { title: 'In-Progress', count: inProgressWorkflows, icon: Send, change: 'Workflows you have initiated', color: 'text-blue-500', bgColor: 'bg-blue-500/10' },
-        { title: 'Finished', count: recentFinishedCount, icon: CheckCircle, change: 'Recently completed or rejected', color: 'text-green-500', bgColor: 'bg-green-500/10' },
+        { title: 'Pending Expenses', count: pendingTasksCount, icon: FileClock, change: 'Awaiting your action', color: 'text-yellow-500', bgColor: 'bg-yellow-500/10' },
+        { title: 'Expenses In-Progress', count: inProgressWorkflows, icon: Send, change: 'Expenses you have submitted', color: 'text-blue-500', bgColor: 'bg-blue-500/10' },
+        { title: 'Finished Expenses', count: recentFinishedCount, icon: CheckCircle, change: 'Recently completed or rejected', color: 'text-green-500', bgColor: 'bg-green-500/10' },
     ];
 
     const recentActivity = useMemo(() => {
@@ -87,7 +87,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
             id: t.id,
             workflowId: t.workflowId,
             title: t.title,
-            type: 'New Task Assigned',
+            type: 'New Expense Assigned',
             date: parseISO(workflows[t.workflowId]?.createdAt || new Date().toISOString()),
             status: t.status,
             icon: FileClock
@@ -96,7 +96,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
             id: t.id,
             workflowId: t.workflowId,
             title: t.title,
-            type: 'Workflow Initiated',
+            type: 'Expense Submitted',
             date: parseISO(t.createdAt || new Date().toISOString()),
             status: t.status,
             icon: Send
@@ -138,10 +138,10 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
             <div className="lg:col-span-3 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
                 <Tabs value={activeTab} onValueChange={onTabChange} defaultValue="my-tasks">
                     <TabsList className="grid w-full grid-cols-4 bg-muted/50 border">
-                        <TabsTrigger value="my-tasks"><ListTodo className="mr-2"/>My Tasks</TabsTrigger>
+                        <TabsTrigger value="my-tasks"><ListTodo className="mr-2"/>My Approvals</TabsTrigger>
                         <TabsTrigger value="pooled-tasks"><Users className="mr-2"/>Pooled</TabsTrigger>
                         <TabsTrigger value="finished-tasks"><FileCheck2 className="mr-2"/>Finished</TabsTrigger>
-                        <TabsTrigger value="initiated-tasks"><Send className="mr-2"/>Initiated</TabsTrigger>
+                        <TabsTrigger value="initiated-tasks"><Send className="mr-2"/>My Submissions</TabsTrigger>
                     </TabsList>
                     <TabsContent value="my-tasks">
                         <MyTasksPage tasks={myTasks} />
@@ -168,7 +168,7 @@ export function DashboardClient({ initialMyTasks, initialInitiatedTasks, workflo
                         {recentActivity.length > 0 ? (
                             <ul className="space-y-1">
                                 {recentActivity.map((activity, index) => {
-                                    const isNewTask = activity.type === 'New Task Assigned';
+                                    const isNewTask = activity.type === 'New Expense Assigned';
                                     return (
                                     <li 
                                         key={activity.id} 
