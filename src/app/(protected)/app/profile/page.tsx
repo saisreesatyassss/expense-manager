@@ -21,7 +21,10 @@ async function getCurrentUser(): Promise<User | null> {
   let allUsers: MockUser[] = BASE_MOCK_USERS;
   if (usersCookie) {
     try {
-      allUsers = JSON.parse(usersCookie.value);
+      const parsedUsers = JSON.parse(usersCookie.value);
+      if (Array.isArray(parsedUsers)) {
+          allUsers = parsedUsers;
+      }
     } catch {
       // Fallback to mock users if cookie is malformed
     }

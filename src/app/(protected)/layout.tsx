@@ -5,6 +5,7 @@ import { AppShell } from '@/components/shell/app-shell';
 import { BASE_MOCK_USERS } from '@/lib/data';
 import type { User, MockUser } from '@/lib/types';
 import { Chatbot } from '@/components/chatbot/chatbot';
+import { redirect } from 'next/navigation';
 
 async function getCurrentUser(): Promise<User | null> {
   const cookieStore = cookies();
@@ -44,6 +45,12 @@ async function getCurrentUser(): Promise<User | null> {
 
 export default async function ProtectedLayout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser();
+
+  // If there's no user, the middleware should have already redirected.
+  // But as a failsafe, we can redirect here too.
+  if (!user) {
+    redirect('/login');
+  }
 
   return (
     <AppShell user={user}>

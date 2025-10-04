@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { userFormSchema } from "@/lib/schemas";
 import { addUser } from "./actions";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -38,8 +37,20 @@ interface AddUserFormProps {
     designations: string[];
 }
 
-// Omit password fields for the client-side form
-const formSchema = userFormSchema.omit({ password: true, confirmPassword: true });
+// Define the schema directly on the client, removing the problematic .omit()
+const formSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  email: z.string().email('Invalid email address'),
+  employeeId: z.string().min(1, 'Employee ID is required'),
+  mobile: z.string().min(10, 'Mobile number must be at least 10 digits'),
+  designation: z.string().min(1, 'Designation is required'),
+  department: z.string().min(1, 'Department is required'),
+  role: z.enum(['user', 'admin']),
+  resetPasswordOnFirstLogin: z.boolean().default(true),
+});
+
 type FormData = z.infer<typeof formSchema>;
 
 export function AddUserForm({ departments, designations }: AddUserFormProps) {
