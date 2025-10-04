@@ -1,4 +1,4 @@
-# FlowForm - Approval Management System (Frontend)
+# Expense Manager - Approval Management System (Frontend)
 
 This is a production-ready **Server-Side Rendered (SSR) frontend** for an "Approval Management System (AMS)" built with Next.js (TypeScript), TailwindCSS, and React.
 
@@ -45,7 +45,7 @@ Clone the repository and install the dependencies:
 
 ```bash
 git clone <repository-url>
-cd flowform-frontend
+cd expense-manager
 npm install
 ```
 
@@ -197,7 +197,7 @@ Fetches a paginated and searchable list of users.
           "firstName": "Admin",
           "lastName": "User",
           "username": "admin",
-          "email": "admin@flowform.com",
+          "email": "admin@expensemanager.com",
           /* ... other user fields ... */
         }
       ],

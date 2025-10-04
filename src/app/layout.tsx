@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'FlowForm - Approval Management System',
+  title: 'Expense Manager - Approval Management System',
   description: 'A production-ready Approval Management System (AMS)',
 };
 

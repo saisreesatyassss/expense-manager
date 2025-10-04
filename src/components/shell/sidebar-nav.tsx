@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -79,7 +78,7 @@ export function AppSidebarNav({ user }: AppSidebarNavProps) {
                 <Leaf className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden">
-                FlowForm
+                Expense Manager
             </span>
         </Link>
       </SidebarHeader>
@@ -229,7 +228,7 @@ export function AdminSidebarNav() {
             </div>
             <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                 <span className="text-lg font-semibold">
-                    FlowForm
+                    Expense Manager
                 </span>
                 <span className="text-xs text-muted-foreground -mt-1">Admin Panel</span>
             </div>

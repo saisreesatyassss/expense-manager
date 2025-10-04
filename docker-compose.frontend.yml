@@ -5,15 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: flowform-frontend
+    container_name: expense-manager-frontend
     ports:
       - "9002:9002"
     env_file:
       - .env.local
     restart: unless-stopped
     networks:
-      - flowform-net
+      - expense-manager-net
 
 networks:
-  flowform-net:
+  expense-manager-net:
     driver: bridge

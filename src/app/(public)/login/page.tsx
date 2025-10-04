@@ -39,7 +39,7 @@ export default async function LoginPage() {
             <div className="flex items-center justify-center bg-primary rounded-full p-3 mb-4">
                 <Leaf className="h-8 w-8 text-primary-foreground" />
             </div>
-            <h1 className="text-3xl font-bold text-primary">FlowForm</h1>
+            <h1 className="text-3xl font-bold text-primary">Expense Manager</h1>
             <p className="text-muted-foreground">Approval Management System</p>
         </div>
 

@@ -76,7 +76,7 @@ export function Chatbot() {
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="flex items-center gap-2">
                                 <Bot className="text-primary" />
-                                FlowForm Assistant
+                                Expense Manager Assistant
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

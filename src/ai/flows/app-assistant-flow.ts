@@ -1,7 +1,7 @@
 'use server';
 
 /**
- * @fileOverview A helpful AI assistant for the FlowForm application.
+ * @fileOverview A helpful AI assistant for the Expense Manager application.
  *
  * - appAssistant - A function that takes a user query and application context to provide helpful answers.
  * - AppAssistantInput - The input type for the appAssistant function.
@@ -30,7 +30,7 @@ const appAssistantPrompt = ai.definePrompt({
   name: 'appAssistantPrompt',
   input: {schema: AppAssistantInputSchema},
   output: {schema: AppAssistantOutputSchema},
-  prompt: `You are a helpful AI assistant for an application called "FlowForm".
+  prompt: `You are a helpful AI assistant for an application called "Expense Manager".
 Your role is to answer user questions based on the current state of the application, which is provided to you as a JSON string.
 
 You can answer questions about:
