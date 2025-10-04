@@ -35,12 +35,16 @@ const getAdminDashboardData = async () => {
     const usersCookie = cookieStore.get('users_data');
     
     let allUsers: MockUser[] = BASE_MOCK_USERS;
-    if (usersCookie) {
-        allUsers = JSON.parse(usersCookie.value);
+    if (usersCookie?.value) {
+        try {
+            allUsers = JSON.parse(usersCookie.value);
+        } catch {
+             allUsers = BASE_MOCK_USERS;
+        }
     }
 
-    const myTasks: Task[] = myTasksCookie ? JSON.parse(myTasksCookie.value) : [];
-    const initiatedTasks: Task[] = initiatedWorkflowsCookie ? JSON.parse(initiatedWorkflowsCookie.value) : [];
+    const myTasks: Task[] = myTasksCookie?.value ? JSON.parse(myTasksCookie.value) : [];
+    const initiatedTasks: Task[] = initiatedWorkflowsCookie?.value ? JSON.parse(initiatedWorkflowsCookie.value) : [];
 
     const totalWorkflows = initiatedTasks.length;
     const pendingTasks = myTasks.filter(t => t.status === 'pending').length;
